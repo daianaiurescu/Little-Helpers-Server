@@ -2,6 +2,7 @@ package com.little.helpers.services;
 
 import com.little.helpers.exceptions.EmailNotValid;
 import com.little.helpers.exceptions.NotStrongPassword;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -35,20 +36,9 @@ public class Encryption {
             throw new EmailNotValid();
     }
 
-    public static String encryptString (String key, String password) {
-        MessageDigest md = getMessageDigest();
-        md.update(key.getBytes(StandardCharsets.UTF_8));
-        byte[] hashedPassword = md.digest(password.getBytes(StandardCharsets.UTF_8));
-        return new String(hashedPassword, StandardCharsets.UTF_8).replace("\n", "");
+    public static String encryptString (String password) {
+        return new BCryptPasswordEncoder().encode(password);
     }
-    private static MessageDigest getMessageDigest() {
-        MessageDigest md;
-        try {
-            md = MessageDigest.getInstance("SHA-512");
-        } catch (NoSuchAlgorithmException e) {
-            throw new IllegalStateException("SHA-512 does not exist!");
-        }
-        return md;
-    }
+
 
 }
