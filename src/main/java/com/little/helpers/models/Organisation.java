@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -32,4 +33,8 @@ public class Organisation {
 
     @Column(name = "photo")
     private String photo;
+
+    @OneToMany(targetEntity = Volunteer.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "id", referencedColumnName = "id")
+    private List<Volunteer> volunteers;
 }

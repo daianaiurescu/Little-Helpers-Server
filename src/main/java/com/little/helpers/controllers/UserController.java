@@ -50,19 +50,24 @@ public class UserController {
         return repo.findAll();
     }
 
-    @PostMapping ("/Authenticate")
-    public Optional<User> LoginUSer(@RequestBody AuthRequest authRequest) {
-        try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(authRequest.getUserName(),
-                            authRequest.getPassword())
-            );
-        } catch (Exception ex) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid username/password", ex);
-        }
-        Optional<User> userDB = repo.findByEmailAddress(authRequest.getUserName());
-        return userDB;
+    @GetMapping("/Authenticate")
+    public String CheckAuth(){
+        return "HIIIIII";
     }
+
+//    @PostMapping ("/Authenticate")
+//    public Optional<User> LoginUSer(@RequestBody AuthRequest authRequest) {
+//        try {
+//            authenticationManager.authenticate(
+//                    new UsernamePasswordAuthenticationToken(authRequest.getUserName(),
+//                            authRequest.getPassword())
+//            );
+//        } catch (Exception ex) {
+//            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid username/password", ex);
+//        }
+//        Optional<User> userDB = repo.findByEmailAddress(authRequest.getUserName());
+//        return userDB;
+//    }
     @PostMapping("/Save")
     public ResponseEntity<String> SaveUser(@RequestBody User user) {
         try {
