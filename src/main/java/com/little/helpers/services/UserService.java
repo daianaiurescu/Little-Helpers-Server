@@ -24,6 +24,16 @@ public class UserService implements UserDetailsService {
     @Autowired
     private UserRepository repo;
 
+    public String getErrorMsg() {
+        return errorMsg;
+    }
+
+    public void setErrorMsg(String errorMsg) {
+        this.errorMsg = errorMsg;
+    }
+
+    private String errorMsg;
+
     public List<User> listAll() {
         return repo.findAll();
     }
@@ -42,6 +52,7 @@ public class UserService implements UserDetailsService {
         }catch(UserNotFound ignored){}
     }
 
+
     public void newUserAccount(User std) throws IOException {
 
         try {
@@ -52,10 +63,12 @@ public class UserService implements UserDetailsService {
             searchUserAlready(std.getEmailAddress());
             User newU = new User(std.getFirstName() , std.getLastName() , std.getEmailAddress() ,Encryption.encryptString(std.getPassword()),"user");
             repo.save(newU);
-        } catch (CompleteAllFields | EmailNotValid | EmailAlreadyExists | NotStrongPassword e) {}
+        } catch (CompleteAllFields | EmailNotValid | EmailAlreadyExists | NotStrongPassword e) {
+            setErrorMsg(e.getMessage());
+        }
     }
 
-    public User get(int id) {
+    public User getUserByID(int id) {
         return repo.findById(id).get();
     }
 

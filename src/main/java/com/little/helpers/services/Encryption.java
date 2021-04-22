@@ -7,6 +7,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import java.util.regex.Pattern;
 
 public class Encryption {
@@ -37,7 +38,9 @@ public class Encryption {
     }
 
     public static String encryptString (String password) {
-        return new BCryptPasswordEncoder().encode(password);
+        byte[] passBytes=password.getBytes(StandardCharsets.UTF_8);
+        String encodedPassword = Base64.getEncoder().encodeToString(passBytes);
+        return encodedPassword;
     }
 
 
