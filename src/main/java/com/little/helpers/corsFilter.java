@@ -1,9 +1,6 @@
 package com.little.helpers;
 
 import org.springframework.web.filter.GenericFilterBean;
-
-import org.springframework.web.filter.GenericFilterBean;
-
 import javax.servlet.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;

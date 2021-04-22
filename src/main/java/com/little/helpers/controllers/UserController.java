@@ -50,15 +50,12 @@ public class UserController {
         return repo.findAll();
     }
 
+
     @GetMapping("/User/{id}")
     public User getUser(@PathVariable("id") String id) {
         int idInt = Integer.parseInt(id);
         return service.getUserByID(idInt);}
 
-//    @GetMapping("/Authenticate")
-//    public String CheckAuth(){
-//        return "HIIIIII";
-//    }
 
    @PostMapping("/Save")
     public ResponseEntity<String> SaveUser(@RequestBody User user) throws IOException {
@@ -75,5 +72,20 @@ public class UserController {
         if(!(authRequest.getPassword().isEmpty() || authRequest.getUserName().isEmpty()) && authReqPassword.equals(userDB.get().getPassword()))
         return userDB;
         return new ResponseEntity<String>("Invalid username/password", HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+
+
+//    @PostMapping ("/Authenticate")
+//    public Optional<User> LoginUSer(@RequestBody AuthRequest authRequest) {
+//        try {
+//            authenticationManager.authenticate(
+//                    new UsernamePasswordAuthenticationToken(authRequest.getUserName(),
+//                            authRequest.getPassword())
+//            );
+//        } catch (Exception ex) {
+//            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid username/password", ex);
+//        }
+//        Optional<User> userDB = repo.findByEmailAddress(authRequest.getUserName());
+//        return userDB;
+//    }
+  
 }
