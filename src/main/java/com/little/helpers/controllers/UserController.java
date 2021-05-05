@@ -57,14 +57,14 @@ public class UserController {
     public UserPublic getUser(@PathVariable("id") String id) {
         int idInt = Integer.parseInt(id);
 
-        User userDB  = service.getUserByID(idInt);
+        User userDB = service.getUserByID(idInt);
         UserPublic userPublic = new UserPublic(
                 userDB.getId(),
                 userDB.getFirstName(),
                 userDB.getLastName(),
                 userDB.getEmailAddress(),
                 userDB.getRole(),
-                userDB.getTokens().get(userDB.getTokens().size()-1).getToken());
+                userDB.getTokens().get(userDB.getTokens().size() - 1).getToken());
         return userPublic;
     }
 
@@ -78,33 +78,32 @@ public class UserController {
     }
 
 
+    @PostMapping("/Authenticate")
+    public Object createAuthenticationToken(@RequestBody AuthRequest authRequest) throws Exception {
 
-   @PostMapping("/Authenticate")
-   public Object createAuthenticationToken(@RequestBody AuthRequest authRequest) throws Exception {
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(authRequest.getUserName(), Encryption.encryptString(authRequest.getPassword()))
+            );
 
-       try {
-           authenticationManager.authenticate(
-                   new UsernamePasswordAuthenticationToken(authRequest.getUserName(), Encryption.encryptString(authRequest.getPassword()))
-           );
+        } catch (BadCredentialsException e) {
+            throw new Exception("Incorrect username or password", e);
+        }
+        UserDetails userDetails = service.loadUserByUsername(authRequest.getUserName());
+        String token = jwtUtil.generateToken(userDetails.getUsername());
+        service.assignToken(authRequest.getUserName(), token);
+        Optional<User> userDB = repo.findByEmailAddress(authRequest.getUserName());
+        UserPublic userPublic = new UserPublic(userDB.get().getId(),
+                userDB.get().getFirstName(),
+                userDB.get().getLastName(),
+                userDB.get().getEmailAddress(),
+                userDB.get().getRole(),
+                token);
 
-       }
-       catch (BadCredentialsException e){
-           throw new Exception("Incorrect username or password", e);
-       }
-       UserDetails userDetails = service.loadUserByUsername(authRequest.getUserName());
-       String token = jwtUtil.generateToken(userDetails.getUsername());
-       service.assignToken(authRequest.getUserName(), token);
-       Optional<User> userDB = repo.findByEmailAddress(authRequest.getUserName());
-       UserPublic userPublic = new UserPublic(userDB.get().getId(),
-                                              userDB.get().getFirstName(),
-                                              userDB.get().getLastName(),
-                                              userDB.get().getEmailAddress(),
-                                              userDB.get().getRole(),
-                                              token);
+        return userPublic;
 
-       return userPublic;
+    }
 
-   }
     @GetMapping("/user/token")
     public UserPublic findByToken(@RequestHeader(value = "Authorization") String s) {
         String t = s.substring(7);
@@ -118,6 +117,7 @@ public class UserController {
                 userDB.getRole(),
                 t);
     }
+
     @DeleteMapping("/user/logout")
     public UserPublic logoutUser(@RequestHeader(value = "Authorization") String token) {
         String t = token.substring(7);
@@ -135,13 +135,4 @@ public class UserController {
                 userDB.getRole(),
                 null);
     }
-
-    @PostMapping ("/Authenticate")
-    public Object LoginUSer(@RequestBody AuthRequest authRequest) {
-        Optional<User> userDB = repo.findByEmailAddress(authRequest.getUserName());
-        String authReqPassword = Encryption.encryptString(authRequest.getPassword());
-        if(!(authRequest.getPassword().isEmpty() || authRequest.getUserName().isEmpty()) && authReqPassword.equals(userDB.get().getPassword()))
-        return userDB;
-        return new ResponseEntity<String>("Invalid username/password", HttpStatus.INTERNAL_SERVER_ERROR);
-
 }
