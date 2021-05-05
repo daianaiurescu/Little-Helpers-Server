@@ -52,6 +52,7 @@ public class UserController {
         return repo.findAll();
     }
 
+
     @GetMapping("/User/{id}")
     public UserPublic getUser(@PathVariable("id") String id) {
         int idInt = Integer.parseInt(id);
@@ -67,10 +68,6 @@ public class UserController {
         return userPublic;
     }
 
-//    @GetMapping("/Authenticate")
-//    public String CheckAuth(){
-//        return "HIIIIII";
-//    }
 
     @PostMapping("/Save")
     public ResponseEntity<String> SaveUser(@RequestBody User user) throws IOException {
@@ -80,18 +77,6 @@ public class UserController {
         return new ResponseEntity<>(service.getErrorMsg(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-//    @PostMapping ("/Authenticate")
-//    public Object LoginUSer(@RequestBody AuthRequest authRequest) {
-//        Optional<User> userDB = repo.findByEmailAddress(authRequest.getUserName());
-//        String authReqPassword = Encryption.encryptString(authRequest.getPassword());
-//        if(!(authRequest.getPassword().isEmpty() || authRequest.getUserName().isEmpty()) && authReqPassword.equals(userDB.get().getPassword())) {
-//            UserDetails userDetails = service.loadUserByUsername(authRequest.getUserName());
-//            String jwt = jwtUtil.generateToken(userDetails.getUsername());
-//            System.out.println(jwt);
-//            return userDB;
-//        }
-//        return new ResponseEntity<String>("Invalid username/password", HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
 
 
    @PostMapping("/Authenticate")
@@ -150,4 +135,13 @@ public class UserController {
                 userDB.getRole(),
                 null);
     }
+
+    @PostMapping ("/Authenticate")
+    public Object LoginUSer(@RequestBody AuthRequest authRequest) {
+        Optional<User> userDB = repo.findByEmailAddress(authRequest.getUserName());
+        String authReqPassword = Encryption.encryptString(authRequest.getPassword());
+        if(!(authRequest.getPassword().isEmpty() || authRequest.getUserName().isEmpty()) && authReqPassword.equals(userDB.get().getPassword()))
+        return userDB;
+        return new ResponseEntity<String>("Invalid username/password", HttpStatus.INTERNAL_SERVER_ERROR);
+
 }
