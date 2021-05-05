@@ -37,4 +37,8 @@ public class Organisation {
     @OneToMany(targetEntity = Volunteer.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "id", referencedColumnName = "id")
     private List<Volunteer> volunteers;
+
+    @OneToMany(targetEntity = Product.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "id", referencedColumnName = "id")
+    private List<Product> products;
 }
