@@ -2,8 +2,9 @@ package com.little.helpers.models;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import com.little.helpers.models.UserToken;
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -30,6 +31,10 @@ public class User {
 
     @Column(name = "role")
     private String role;
+
+    @OneToMany(targetEntity = UserToken.class,cascade = CascadeType.ALL)
+    @JoinColumn(name ="uid", referencedColumnName = "id")
+    private List<UserToken> tokens;
 
     public User(String firstName , String lastName ,String emailAddress , String password, String role) {
         this.firstName = firstName;
@@ -85,5 +90,9 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public List<UserToken> getTokens() {
+        return tokens;
     }
 }

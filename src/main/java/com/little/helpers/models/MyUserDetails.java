@@ -15,18 +15,31 @@ import java.util.stream.Collectors;
 
 public class MyUserDetails implements UserDetails {
 
+    private int id;
     private String firstName;
     private String lastName;
     private String emailAddress;
     private String password;
+    private String token;
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
     private List<GrantedAuthority> authorities = new ArrayList<>();
 
     public MyUserDetails(User user) {
+        this.id = user.getId();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.emailAddress = user.getEmailAddress();
         this.password = user.getPassword();
-        this.authorities.add(new SimpleGrantedAuthority("ROLE_"+user.getRole()));
+        this.token = token;
+        this.authorities.add(new SimpleGrantedAuthority(user.getRole()));
     }
 
     @Override
