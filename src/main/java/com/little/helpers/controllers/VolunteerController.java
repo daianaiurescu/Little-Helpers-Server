@@ -1,6 +1,7 @@
 package com.little.helpers.controllers;
 
 
+import com.little.helpers.models.User;
 import com.little.helpers.models.Volunteer;
 import com.little.helpers.repositories.VolunteerRepository;
 import com.little.helpers.services.VolunteerService;
@@ -12,7 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class VolunteerController {
@@ -27,13 +30,21 @@ public class VolunteerController {
         return repo.findAll();
     }
 
+    @GetMapping("/GetVolunteer")
+    public void getVolunteer(@RequestBody Object email) {
+        System.out.println(email);
+//        Optional<Volunteer> v = repo.findByEmailAddress(<String>email);
+//        return v.get();
+//
+}
+
     @PostMapping("/SaveVolunteer")
-    public ResponseEntity<String> SaveVolunteer(@RequestBody Volunteer volunteer) {
-        try {
+    public ResponseEntity<String> SaveVolunteer(@RequestBody Volunteer volunteer) throws IOException {
             service.newVolunteer(volunteer);
-            return new ResponseEntity<>("Saving complete", HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+            if (service.getErrorMsg().isEmpty()) {
+                return new ResponseEntity<>("Saving complete", HttpStatus.CREATED);
+            }
+            else
+            return new ResponseEntity<>(service.getErrorMsg(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
