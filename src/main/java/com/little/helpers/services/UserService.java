@@ -47,7 +47,31 @@ public class UserService implements UserDetailsService {
             user.orElseThrow(()-> new UserNotFound());
             return user.map(MyUserDetails::new).get();
     }
-
+    public User searchUserByEmail(String emailAddress) throws UserNotFound {
+          try {
+              Optional<User> user = repo.findByEmailAddress(emailAddress);
+              if (user.isEmpty())
+                  throw new UserNotFound();
+              return user.get();
+          } catch (UserNotFound e) {
+              setErrorMsg(e.getMessage());
+          }
+          return null;
+    }
+    public void changeUserPassword(String email , String password) {
+        try {
+                errorMsg = "";
+                if(email.isEmpty() || password.isEmpty())
+                    throw new CompleteAllFields();
+                Encryption.checkEmailStructure(email);
+                Encryption.checkPasswordStrength(password);
+                User user = this.searchUserByEmail(email);
+                user.setPassword(Encryption.encryptString(password));
+                repo.save(user);
+        } catch (CompleteAllFields | EmailNotValid | NotStrongPassword e) {
+            setErrorMsg(e.getMessage());
+        }
+    }
     public void searchUserAlready (String emailAddress) throws EmailAlreadyExists {
         try {
             loadUserByUsername(emailAddress);
@@ -59,6 +83,7 @@ public class UserService implements UserDetailsService {
     public void newUserAccount(User std) throws IOException {
 
         try {
+            errorMsg = "";
             if (std.getFirstName().length() < 2 || std.getLastName().length() < 2)
                 throw new CompleteAllFields();
             Encryption.checkEmailStructure(std.getEmailAddress());

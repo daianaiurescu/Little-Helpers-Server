@@ -1,5 +1,6 @@
 package com.little.helpers.controllers;
 
+import com.little.helpers.exceptions.NotStrongPassword;
 import com.little.helpers.exceptions.UserTokenNotFound;
 import com.little.helpers.models.AuthRequest;
 import com.little.helpers.models.MyUserDetails;
@@ -67,13 +68,20 @@ public class UserController {
                 userDB.getTokens().get(userDB.getTokens().size() - 1).getToken());
         return userPublic;
     }
-    //@PatchMapping("/Change")
+    @PostMapping("/ChangePassword")
+    public ResponseEntity<String> changePassword(@RequestBody AuthRequest authRequest) {
+        service.changeUserPassword(authRequest.getUserName(),authRequest.getPassword());
+        if (service.getErrorMsg().length()==0) {
+            return new ResponseEntity<>("Password changed", HttpStatus.CREATED);
+        }
+           return new ResponseEntity<>(service.getErrorMsg(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
     @PostMapping("/Save")
     public ResponseEntity<String> SaveUser(@RequestBody User user) throws IOException {
         service.newUserAccount(user);
-        if (service.getErrorMsg().isEmpty())
+        if (service.getErrorMsg().length()==0)
             return new ResponseEntity<>("Registration Complete", HttpStatus.CREATED);
-        return new ResponseEntity<>(service.getErrorMsg(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(service.getErrorMsg(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 

@@ -46,7 +46,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         http.csrf().disable().authorizeRequests()
                  // .antMatchers("/Authenticate").hasRole("USER").and().formLogin();
-                .antMatchers("/Authenticate","/Organisations", "/Users", "/Home", "/Save", "/SaveVolunteer", "/GetVolunteers","/GetVolunteer","/User/{id}","/user/token","/user/logout", "/Products", "/SaveProduct").permitAll()
+                .antMatchers("/Authenticate","/Organisations", "/Users", "/Home", "/Save", "/SaveVolunteer", "/GetVolunteers","/GetVolunteer","/User/{id}","/user/token","/user/logout", "/Products", "/SaveProduct","/ChangePassword").permitAll()
+
                 .anyRequest().authenticated()
                 .and().exceptionHandling().and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);

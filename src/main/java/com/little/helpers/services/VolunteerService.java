@@ -35,9 +35,9 @@ public class VolunteerService {
 
             if(volunteer.getFirstName().equals("First name...") ||
                     volunteer.getLastName().equals("Last name...") ||
-                    volunteer.getPhone().equals("Phone number...") ||
+                    volunteer.getPhone().equals("") ||
                     volunteer.getEmailAddress().equals("Email address...") ||
-                    volunteer.getDescription().equals("Tell us about yourself..."))
+                    volunteer.getDescription().equals(""))
                 throw new CompleteAllFields();
             if (volunteer.getFirstName().length() < 2 || volunteer.getLastName().length() < 2 || volunteer.getDescription().length() < 2 || (volunteer.getPhone().length()!=10 && volunteer.getPhone().contains("0123456789")))
                 throw new CompleteAllFields();
