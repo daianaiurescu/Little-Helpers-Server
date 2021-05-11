@@ -30,13 +30,13 @@ public class VolunteerController {
         return repo.findAll();
     }
 
-    @GetMapping("/GetVolunteer")
-    public void getVolunteer(@RequestBody Object email) {
-        System.out.println(email);
+//    @GetMapping("/GetVolunteer")
+//    public void getVolunteer(@RequestBody String email) {
+//        System.out.println(email);
 //        Optional<Volunteer> v = repo.findByEmailAddress(<String>email);
 //        return v.get();
 //
-}
+//}
 
     @PostMapping("/SaveVolunteer")
     public ResponseEntity<String> SaveVolunteer(@RequestBody Volunteer volunteer) throws IOException {

@@ -67,8 +67,7 @@ public class UserController {
                 userDB.getTokens().get(userDB.getTokens().size() - 1).getToken());
         return userPublic;
     }
-
-
+    //@PatchMapping("/Change")
     @PostMapping("/Save")
     public ResponseEntity<String> SaveUser(@RequestBody User user) throws IOException {
         service.newUserAccount(user);
