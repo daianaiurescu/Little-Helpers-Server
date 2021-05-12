@@ -55,7 +55,17 @@ public class VolunteerService {
             setErrorMsg(e.getMessage());
         }
     }
-    public List<Organisation> getVolunteerOrganisations(String emailAddress) {
+    public void deleteVolunteer(Volunteer volunteer) {
+        System.out.println(volunteer);
+        try {
+            System.out.println('a');
+            repo.deleteById(volunteer.getId());
+        } catch (Exception e) {
+            throw new UserNotFound();
+        }
+    }
+
+        public List<Organisation> getVolunteerOrganisations(String emailAddress) {
         List<Organisation> org = new ArrayList<>();
         List<Volunteer> vol = repo.findAll().stream().filter(volunteer -> volunteer.getEmailAddress().equals(emailAddress))
                                                      .collect(Collectors.toList());

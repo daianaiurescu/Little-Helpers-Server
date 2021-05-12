@@ -41,4 +41,12 @@ public class Organisation {
     @OneToMany(targetEntity = Product.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "id", referencedColumnName = "id")
     private List<Product> products;
+
+    public String getTitle(){
+        return this.title;
+    }
+    public String getDescription(){
+        return this.description;
+    }
+    public void setDescription(String d) {this.description = d;}
 }

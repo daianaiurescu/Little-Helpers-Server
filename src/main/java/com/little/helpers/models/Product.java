@@ -39,6 +39,9 @@ public class Product {
     @Column(name = "photo")
     private String photo;
 
+    @Column(name="quantity")
+    private int quantity;
+
     public Product(String t, String c, String sb, float p, int s, String d, String ph){
         title = t;
         category = c;
@@ -47,6 +50,7 @@ public class Product {
         stock = s;
         description = d;
         photo = ph;
+        quantity = 1;
     }
 
     public int getId(){ return id; }

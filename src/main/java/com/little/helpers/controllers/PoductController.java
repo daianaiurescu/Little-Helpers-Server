@@ -6,11 +6,9 @@ import com.little.helpers.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -26,12 +24,16 @@ public class PoductController {
     }
 
     @PostMapping("/SaveProduct")
-    public ResponseEntity<String> SaveProduct(@RequestBody Product product) {
-        try {
-            service.newProduct(product);
+    public ResponseEntity<String> SaveProduct(@RequestBody Product product) throws IOException {
+        service.newProduct(product);
+        if (service.getErrorMsg().isEmpty()) {
             return new ResponseEntity<>("Saving complete", HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        else
+            return new ResponseEntity<>(service.getErrorMsg(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    @DeleteMapping("/DeleteProduct/{title}")
+    public void DeleteProduct(@PathVariable("title") String title){
+        service.deleteProduct(title);
     }
 }
