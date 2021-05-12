@@ -26,6 +26,7 @@ public class VolunteerController {
 
     @GetMapping("/GetVolunteers")
     public List<Volunteer> getVolunteers() {
+
         return repo.findAll();
     }
 
