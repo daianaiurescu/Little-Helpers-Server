@@ -1,11 +1,9 @@
 package com.little.helpers.controllers;
 
+import com.little.helpers.exceptions.EmailNotValid;
 import com.little.helpers.exceptions.NotStrongPassword;
 import com.little.helpers.exceptions.UserTokenNotFound;
-import com.little.helpers.models.AuthRequest;
-import com.little.helpers.models.MyUserDetails;
-import com.little.helpers.models.User;
-import com.little.helpers.models.UserPublic;
+import com.little.helpers.models.*;
 import com.little.helpers.repositories.UserRepository;
 import com.little.helpers.services.Encryption;
 import com.little.helpers.services.JwtUtil;
@@ -141,5 +139,9 @@ public class UserController {
                 userDB.getEmailAddress(),
                 userDB.getRole(),
                 null);
+    }
+    @PostMapping("/ChangeUserDetails")
+    public void changeUserDetails(@RequestBody User user) throws EmailNotValid {
+        service.changeUserDetails(user.getFirstName(), user.getLastName(), user.getEmailAddress());
     }
 }

@@ -2,6 +2,7 @@ package com.little.helpers.services;
 
 import com.little.helpers.exceptions.*;
 import com.little.helpers.models.User;
+import com.little.helpers.exceptions.UserNotFound;
 import com.little.helpers.models.Volunteer;
 import com.little.helpers.repositories.VolunteerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,5 +54,14 @@ public class VolunteerService {
             setErrorMsg(e.getMessage());
         }
 
+    }
+    public void deleteVolunteer(Volunteer volunteer) {
+        System.out.println(volunteer);
+        try {
+            System.out.println('a');
+            repo.deleteById(volunteer.getId());
+        } catch (Exception e) {
+            throw new UserNotFound();
+        }
     }
 }

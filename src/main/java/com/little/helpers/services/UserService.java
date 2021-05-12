@@ -3,6 +3,7 @@ package com.little.helpers.services;
 
 import com.little.helpers.exceptions.*;
 import com.little.helpers.models.MyUserDetails;
+import com.little.helpers.models.Organisation;
 import com.little.helpers.models.User;
 import com.little.helpers.models.UserToken;
 import com.little.helpers.repositories.UserRepository;
@@ -58,6 +59,17 @@ public class UserService implements UserDetailsService {
           }
           return null;
     }
+    public User searchUserByFullName(String firstName) throws UserNotFound{
+        try {
+            Optional<User> user = repo.findByFirstName(firstName);
+            if (user.isEmpty())
+                throw new UserNotFound();
+            return user.get();
+        } catch (UserNotFound e) {
+            setErrorMsg(e.getMessage());
+        }
+        return null;
+    }
     public void changeUserPassword(String email , String password) {
         try {
                 errorMsg = "";
@@ -89,7 +101,7 @@ public class UserService implements UserDetailsService {
             Encryption.checkEmailStructure(std.getEmailAddress());
             Encryption.checkPasswordStrength(std.getPassword());
             searchUserAlready(std.getEmailAddress());
-            User newU = new User(std.getFirstName() , std.getLastName() , std.getEmailAddress() ,Encryption.encryptString(std.getPassword()),"user");
+            User newU = new User(std.getFirstName() , std.getLastName() , std.getEmailAddress() ,Encryption.encryptString(std.getPassword()),std.getRole());
             repo.save(newU);
         } catch (CompleteAllFields | EmailNotValid | EmailAlreadyExists | NotStrongPassword e) {
             setErrorMsg(e.getMessage());
@@ -127,6 +139,17 @@ public class UserService implements UserDetailsService {
             userTokenRepository.deleteById(userToken.getId());
         } catch (Exception e) {
             throw new UserTokenNotFound(String.format("Token %s not found", token));
+        }
+    }
+    public void changeUserDetails(String firstName, String lastName, String email) throws EmailNotValid {
+        try {
+            User user = this.searchUserByFullName(firstName);
+            Encryption.checkEmailStructure(email);
+            user.setEmailAddress(email);
+            user.setLastName(lastName);
+            repo.save(user);
+        }catch(EmailNotValid e){
+            setErrorMsg(e.getMessage());
         }
     }
 }
