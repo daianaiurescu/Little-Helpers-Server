@@ -26,7 +26,7 @@ public class PoductController {
     @PostMapping("/SaveProduct")
     public ResponseEntity<String> SaveProduct(@RequestBody Product product) throws IOException {
         service.newProduct(product);
-        if (service.getErrorMsg().isEmpty()) {
+        if (service.getErrorMsg().length()==0) {
             return new ResponseEntity<>("Saving complete", HttpStatus.CREATED);
         }
         else

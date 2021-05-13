@@ -24,6 +24,7 @@ public class ProductService {
 
     public void newProduct(Product product) throws IOException {
         try {
+            errorMsg = "";
             Product newProduct = new Product(product.getTitle(), product.getCategory(), product.getSold_by(), product.getPrice(), product.getStock(), product.getDescription(), product.getPhoto());
             repo.save(newProduct);
 
