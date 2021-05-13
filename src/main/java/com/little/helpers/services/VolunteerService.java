@@ -49,16 +49,20 @@ public class VolunteerService {
             if (volunteer.getFirstName().length() < 2 || volunteer.getLastName().length() < 2 || volunteer.getDescription().length() < 2 || (volunteer.getPhone().length()!=10 && volunteer.getPhone().contains("0123456789")))
                 throw new CompleteAllFields();
             Encryption.checkEmailStructure(volunteer.getEmailAddress());
+            List<Volunteer> vol = repo.findAll().stream().filter(v -> (v.getEmailAddress().equals(volunteer.getEmailAddress()) &&
+                    v.getApplied_at().equals(volunteer.getApplied_at())))
+                    .collect(Collectors.toList());
+            if(!vol.isEmpty())
+                throw  new AlreadyApplied();
             Volunteer newVolunteer = new Volunteer(volunteer.getFirstName(), volunteer.getLastName(), volunteer.getBirthday(), volunteer.getPhone(), volunteer.getEmailAddress(), volunteer.getDescription(), volunteer.getApplied_at());
             repo.save(newVolunteer);
-        } catch (CompleteAllFields | EmailNotValid e) {
+        } catch (CompleteAllFields | EmailNotValid | AlreadyApplied e) {
             setErrorMsg(e.getMessage());
         }
     }
     public void deleteVolunteer(Volunteer volunteer) {
         System.out.println(volunteer);
         try {
-            System.out.println('a');
             repo.deleteById(volunteer.getId());
         } catch (Exception e) {
             throw new UserNotFound();
