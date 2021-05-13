@@ -3,6 +3,7 @@ package com.little.helpers.services;
 import com.little.helpers.exceptions.*;
 import com.little.helpers.models.Organisation;
 import com.little.helpers.models.User;
+import com.little.helpers.exceptions.UserNotFound;
 import com.little.helpers.models.Volunteer;
 import com.little.helpers.repositories.OrganisationRepository;
 import com.little.helpers.repositories.VolunteerRepository;

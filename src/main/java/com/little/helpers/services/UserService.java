@@ -3,6 +3,7 @@ package com.little.helpers.services;
 
 import com.little.helpers.exceptions.*;
 import com.little.helpers.models.MyUserDetails;
+import com.little.helpers.models.Organisation;
 import com.little.helpers.models.User;
 import com.little.helpers.models.UserToken;
 import com.little.helpers.repositories.UserRepository;
@@ -100,7 +101,7 @@ public class UserService implements UserDetailsService {
             Encryption.checkEmailStructure(std.getEmailAddress());
             Encryption.checkPasswordStrength(std.getPassword());
             searchUserAlready(std.getEmailAddress());
-            User newU = new User(std.getFirstName() , std.getLastName() , std.getEmailAddress() ,Encryption.encryptString(std.getPassword()),"user");
+            User newU = new User(std.getFirstName() , std.getLastName() , std.getEmailAddress() ,Encryption.encryptString(std.getPassword()),std.getRole());
             repo.save(newU);
         } catch (CompleteAllFields | EmailNotValid | EmailAlreadyExists | NotStrongPassword e) {
             setErrorMsg(e.getMessage());
