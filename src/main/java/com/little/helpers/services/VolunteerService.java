@@ -2,6 +2,7 @@ package com.little.helpers.services;
 
 import com.little.helpers.exceptions.*;
 import com.little.helpers.models.Organisation;
+import com.little.helpers.models.Product;
 import com.little.helpers.models.User;
 import com.little.helpers.exceptions.UserNotFound;
 import com.little.helpers.models.Volunteer;
@@ -84,5 +85,13 @@ public class VolunteerService {
                                                                           volunteer.getApplied_at().equals(title)))
                                                      .collect(Collectors.toList());
         repo.deleteById(vol.get(0).getId());
+    }
+    public void deleteVolunteer(String email){
+        try {
+            Optional<Volunteer> volunteerToDelete = this.repo.findByEmailAddress(email);
+            this.repo.deleteById(volunteerToDelete.get().getId());
+        }catch (Exception e) {
+            setErrorMsg(e.getMessage());
+        }
     }
 }

@@ -47,4 +47,8 @@ public class VolunteerController {
     public List<Organisation> getUserOrganisations(@PathVariable("emailAddress") String emailAddress) {
         return service.getVolunteerOrganisations(emailAddress);
     }
+    @DeleteMapping("/DeleteVolunteer/{email}")
+    public void DeleteProduct(@PathVariable("email") String email){
+        service.deleteVolunteer(email);
+    }
 }
